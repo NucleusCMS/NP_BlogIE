@@ -149,7 +149,6 @@
             blogieoverview();
             $oPluginAdmin->end();
             return;
-            break;
         }
         
         header('Content-Type: text/xml');
@@ -324,7 +323,6 @@
             blogieoverview();
             $oPluginAdmin->end();
             return;
-            break;
         }
         
         // let's begin!
