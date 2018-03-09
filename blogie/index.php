@@ -66,7 +66,7 @@
                 . ' ORDER BY bname';
         }
         $res = sql_query($query);
-        while ($blogObj = mysql_fetch_object($res)) {
+        while ($blogObj = sql_fetch_object($res)) {
             $blogname = htmlspecialchars($blogObj->bname);
             $blogid = $blogObj->bnumber;
             echo "<option value=\"$blogid\">$blogname</option>";
@@ -162,7 +162,7 @@
         $query = 'SELECT DISTINCT iauthor FROM ' . sql_table('item')
             . ' WHERE iblog='.$blogid;
         $res = sql_query($query);
-        while ($obj = mysql_fetch_object($res)) {
+        while ($obj = sql_fetch_object($res)) {
             $mem = MEMBER::createFromID($obj->iauthor);
             $iauthname[$obj->iauthor] = $mem->getDisplayName();
             unset ($mem);
@@ -172,7 +172,7 @@
         $query = 'SELECT DISTINCT cmember FROM ' . sql_table('comment')
             . ' WHERE cblog='.$blogid;
         $res = sql_query($query);
-        while ($obj = mysql_fetch_object($res)) {
+        while ($obj = sql_fetch_object($res)) {
             $mem = MEMBER::createFromID($obj->cmember);
             $cauthname[$obj->cmember] = $mem->getDisplayName();
             unset ($mem);
@@ -191,7 +191,7 @@
             $query = 'SELECT * FROM ' . sql_table('ban')
                 . ' WHERE blogid='.$blogid;
             $res = sql_query($query);
-            while ($obj = mysql_fetch_object($res)) {
+            while ($obj = sql_fetch_object($res)) {
                 echo  '<ban>'
                     . '<iprange><![CDATA['.$obj->iprange.']]></iprange>'
                     . '<reason><![CDATA['.$obj->reason.']]></reason>'
@@ -203,7 +203,7 @@
         $query = 'SELECT * FROM ' . sql_table('category')
             . ' WHERE cblog='.$blogid;
         $res = sql_query($query);
-        while ($obj = mysql_fetch_object($res)) {
+        while ($obj = sql_fetch_object($res)) {
             echo  '<category>'
                 . '<name><![CDATA['.$obj->cname.']]></name>'
                 . '<desc><![CDATA['.$obj->cdesc.']]></desc>'
@@ -216,7 +216,7 @@
             . ' WHERE iblog='.$blogid
             . ' ORDER BY inumber';
         $res = sql_query($query);
-        while ($itemObj = mysql_fetch_object($res)) { 
+        while ($itemObj = sql_fetch_object($res)) { 
             echo '<item'
                 . ' author="'.$iauthname[$itemObj->iauthor].'"' 
                 . ' datetime="'.$itemObj->itime.'"' 
@@ -234,7 +234,7 @@
                 $subquery = 'SELECT * FROM ' . sql_table('karma')
                     . ' WHERE itemid='.$itemObj->inumber;
                 $subres = sql_query($subquery);
-                while ($subObj = mysql_fetch_object($subres)) {
+                while ($subObj = sql_fetch_object($subres)) {
                     echo '<karmavote ip="'.$subObj->ip.'" />'; 
                 }
             }
@@ -244,7 +244,7 @@
                 $subquery = 'SELECT * FROM ' . sql_table('plugin_tb')
                     . ' WHERE tb_id='.$itemObj->inumber;
                 $subres = sql_query($subquery);
-                while ($subObj = mysql_fetch_object($subres)) {
+                while ($subObj = sql_fetch_object($subres)) {
                     echo '<trackback>'
                     . '<tburl><![CDATA[' . $subObj->url . ']]></tburl>'
                     . '<tbtitle><![CDATA[' . $subObj->title . ']]></tbtitle>'
@@ -261,7 +261,7 @@
                     . ' WHERE citem='.$itemObj->inumber
                     . ' ORDER BY cnumber';
                 $commentres = sql_query($commentquery);
-                while ($commentObj = mysql_fetch_object($commentres)) {
+                while ($commentObj = sql_fetch_object($commentres)) {
                     echo '<comment ' 
                         . ' member="'.$cauthname[$commentObj->cmember].'"' 
                         . ' datetime="'.$commentObj->ctime.'"' 
@@ -341,7 +341,7 @@
         // if user wants to delete everything first, then...
         if ($clearfirst) {
             $res = sql_query('SELECT inumber FROM '.sql_table('item').' WHERE iblog='.$blogid);
-            while ($obj = mysql_fetch_object($res)) {
+            while ($obj = sql_fetch_object($res)) {
                 $kres = sql_query('DELETE FROM '.sql_table('karma').' WHERE itemid='.$obj->inumber);
                 if ($trackback) 
                     $kres = sql_query('DELETE FROM '.sql_table('plugin_tb').' WHERE tb_id='.$obj->inumber);
@@ -366,9 +366,9 @@
             $xspcat->getNextElement('desc', $nothing, $desc);
             $xspcat->cleanup; 
             unset($xspcat);
-             $res = mysql_query('SELECT catid FROM '.sql_table('category')
+             $res = sql_query('SELECT catid FROM '.sql_table('category')
                 . ' WHERE cblog='.$blogid.' and cname="'.addslashes($name).'"');
-            if (!mysql_num_rows($res)) {
+            if (!sql_num_rows($res)) {
                 $blog->createNewCategory($name, $desc);
                 $cats++;
             }
@@ -434,7 +434,7 @@
                     $query = 'SELECT * FROM '.sql_table('karma')
                         . ' WHERE itemid='.$itemid.' and ip="'.$ip['ip'].'"';
                     $res = sql_query($query);
-                    if (!mysql_num_rows($res)) {
+                    if (!sql_num_rows($res)) {
                         $query = 'INSERT INTO '.sql_table('karma').' (itemid, ip)'
                             . ' VALUES ('.$itemid.",'".$ip['ip']."')";
                         sql_query($query);
