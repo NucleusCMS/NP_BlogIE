@@ -23,7 +23,7 @@
 
 class XSP {
 	
-	function XSP() {
+	function __construct() {
 		$this->debug = 0;
 
 		// # of bytes to feed xml_parse function at a time.  Needs to be tuned, but should
@@ -86,7 +86,7 @@ class XSP {
 
 		if ($this->parser) xml_parser_free($this->parser);
 		$this->parser = xml_parser_create();
-		xml_set_object($this->parser, &$this); 
+		xml_set_object($this->parser, $this); 
 		xml_parser_set_option($this->parser, XML_OPTION_CASE_FOLDING, false);
 		xml_set_element_handler($this->parser, 'opening_element', 
 			'closing_element');
@@ -183,6 +183,3 @@ class XSP {
 
 	
 }
- 	
-		
-?>
