@@ -67,7 +67,7 @@
         }
         $res = sql_query($query);
         while ($blogObj = sql_fetch_object($res)) {
-            $blogname = htmlspecialchars($blogObj->bname);
+            $blogname = htmlspecialchars($blogObj->bname, ENT_QUOTES , _CHARSET);
             $blogid = $blogObj->bnumber;
             echo "<option value=\"$blogid\">$blogname</option>";
         }
